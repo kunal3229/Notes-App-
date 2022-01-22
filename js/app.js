@@ -5,15 +5,21 @@ showNotes(); // if we refresh the page this shows old notes from local storage
 let addBtn = document.getElementById('addBtn');
 addBtn.addEventListener("click", function (e) {
     let addTxt = document.getElementById("addTxt");
+    let addTitle = document.getElementById("addTitle");
     let notes = localStorage.getItem("notes");
     if (notes == null) {
         notesObj = [];
     } else {
         notesObj = JSON.parse(notes); // convert string into array
     }
-    notesObj.push(addTxt.value);
+    let myObj = {
+        title: addTitle.value,
+        text: addTxt.value
+    }
+    notesObj.push(myObj);
     localStorage.setItem("notes", JSON.stringify(notesObj));  //push the note into local storage
     addTxt.value = "";  // clear the text area for next note
+    addTitle.value = ""; // clear the title for next title
     console.log(notesObj);
     showNotes();
 });
@@ -31,8 +37,8 @@ function showNotes() {
         html += `
         <div class="noteCard my-2 mx-2 card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">Note ${index + 1}</h5>
-            <p class="card-text">${element}</p>
+            <h5 class="card-title">${element.title}</h5>
+            <p class="card-text">${element.text}</p>
             <button id="${index}" onclick="deleteNote(this.id)" class="btn btn-primary">Delete Note</button>
         </div>
     </div>
